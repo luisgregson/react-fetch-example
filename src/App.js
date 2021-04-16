@@ -47,26 +47,33 @@ export const App = () => {
         console.error(err);
         setBreweries({
           ...DEFAULT_BREWERIES_STATE,
-          error: "An unexpected error ocurred. Please try again later."
+          error: "An unexpected error occurred. Please try again later."
         });
       });
   };
 
+  const handleSubmit = e => {
+    e.preventDefault()
+    searchForBrewery()
+  }
+
   return (
     <div className="App">
       <h1>API Test with Data, Errors, and Loading</h1>
-      <label htmlFor="brewery">Search for a brewery: </label>
-      <input
-        name="brewery"
-        value={searchInput}
-        onChange={(e) => setSearchInput(e.target.value)}
-      />
-      <input type="button" onClick={searchForBrewery} value="Search" />
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="brewery">Search for a brewery: </label>
+        <input
+          name="brewery"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+        />
+        <button type="submit">Search</button>
+      </form>
+      {breweries.loading && <p>Loading...</p>}
+      {breweries.error && <p style={{ color: "red" }}>{breweries.error}</p>}
       {breweries.data.map((brewery) => (
         <div key={brewery.id}>
           <p>{brewery.name}</p>
-          {brewery.loading && <p>Loading...</p>}
-          {brewery.error && <p style={{ color: "red" }}>brewery.error</p>}
           {brewery.websiteURL && (
             <a href={brewery.websiteURL} title={`${brewery.name} website`}>
               Website
